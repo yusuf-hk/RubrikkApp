@@ -25,27 +25,17 @@ public class UsersPrefs
 
     public void setToken(String token)
     {
-        prefsEditor.putString(Config.KEY_TOKEN, token);
+        prefsEditor.putString(Config.KEY_TOKEN, token).commit();
     }
 
-    public String getUserFirstName()
+    public String getName()
     {
-        return userSharedPrefs.getString(Config.KEY_FIRST_NAME, "");
+        return userSharedPrefs.getString(Config.KEY_NAME, "");
     }
 
-    public void setUserFirstName(String userName)
+    public void setName(String name)
     {
-        prefsEditor.putString(Config.KEY_FIRST_NAME, userName).commit();
-    }
-
-    public String getUserLastName()
-    {
-        return userSharedPrefs.getString(Config.KEY_LAST_NAME, "");
-    }
-
-    public void setUserLastName(String userName)
-    {
-        prefsEditor.putString(Config.KEY_LAST_NAME, userName);
+        prefsEditor.putString(Config.KEY_NAME, name).commit();
     }
 
     public String getUserEmail()

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "888163890484",
+    "firebase_url": "https://rubrikk-4919c.firebaseio.com",
+    "project_id": "rubrikk-4919c",
+    "storage_bucket": "rubrikk-4919c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888163890484:android:fba63603d123d5b8ffa161",
+        "android_client_info": {
+          "package_name": "com.harmankaya.rubrikkapp3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "888163890484-8717it41s41eigtcrflvcpg3qu175ppv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz_DT4MJLS0n82pPwhZpsKzmLDnAQyjn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "888163890484-8717it41s41eigtcrflvcpg3qu175ppv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

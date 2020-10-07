@@ -1,5 +1,6 @@
 package com.harmankaya.rubrikkapp3.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +26,12 @@ import com.harmankaya.rubrikkapp3.rest.ApiClient;
 import com.harmankaya.rubrikkapp3.rest.ApiInterface;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Objects;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,19 +51,21 @@ public class RegisterFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_register, container, false);
-    }
+        final View view = inflater.inflate(R.layout.fragment_register, container, false);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
         getActivity().setTitle("Register");
 
-        initViews();
+        initViews(view);
 
         buttonRegister.setOnClickListener(new View.OnClickListener()
         {
+            /** when the register button is clicked, it will checks if
+             *  all fields is not empty and checks if agreement box is check.
+             *  It will send data to server if fields is OK
+             *  if not, then error will come up
+             *
+             * @param v
+             */
             @Override
             public void onClick(View v)
             {
@@ -80,6 +89,8 @@ public class RegisterFragment extends Fragment
                 }
             }
         });
+
+        return view;
     }
 
     public void insertData()
@@ -87,7 +98,6 @@ public class RegisterFragment extends Fragment
         final String name = editTextName.getText().toString();
         final String email = editTextEmail.getText().toString();
         final String password = editTextPassword.getText().toString();
-
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ResponseBody> call = api.registerUser(name, name, email, password);
@@ -96,17 +106,32 @@ public class RegisterFragment extends Fragment
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
             {
-                Toast.makeText(getActivity(), "nice", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful())
+                {
+                    Toast.makeText(getActivity(), "nice", Toast.LENGTH_SHORT).show();
 
-                UsersPrefs usersPrefs = new UsersPrefs(getContext());
-                usersPrefs.setUserEmail(email);
-                usersPrefs.setUserFirstName(name);
-                usersPrefs.setUserLastName(name);
-                usersPrefs.setUserPassword(password);
+                    UsersPrefs usersPrefs = new UsersPrefs(getContext());
+                    usersPrefs.setUserEmail(email);
+                    usersPrefs.setName(name);
+                    usersPrefs.setUserPassword(password);
+                    try
+                    {
+                        JSONObject json = new JSONObject(response.body().string());
+                        usersPrefs.setToken(json.getString("token"));
+                    }
+                    catch (JSONException | IOException e)
+                    {
+                        e.printStackTrace();
+                    }
 
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    getActivity().finish();
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Email is already in use!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -116,24 +141,24 @@ public class RegisterFragment extends Fragment
         });
     }
 
-    private void initViews()
+    private void initViews(View view)
     {
-        editTextName = getActivity().findViewById(R.id.editTextName);
-        editTextEmail = getActivity().findViewById(R.id.editTextEmail);
-        editTextPassword = getActivity().findViewById(R.id.editTextPassword);
-        editTextPasswordAgain = getActivity().findViewById(R.id.editTextPasswordAgain);
+        editTextName = view.findViewById(R.id.editTextName);
+        editTextEmail = view.findViewById(R.id.editTextEmail);
+        editTextPassword = view.findViewById(R.id.editTextPassword);
+        editTextPasswordAgain = view.findViewById(R.id.editTextPasswordAgain);
 
-        buttonPickImage = getActivity().findViewById(R.id.buttonPickImage);
-        buttonRegister = getActivity().findViewById(R.id.buttonRegister);
+        buttonPickImage = view.findViewById(R.id.buttonPickImage);
+        buttonRegister = view.findViewById(R.id.buttonRegister);
 
-        textWarningName = getActivity().findViewById(R.id.textWarningName);
-        textWarningEmail = getActivity().findViewById(R.id.textWarningEmail);
-        textWarningPassword = getActivity().findViewById(R.id.textWarningPassword);
-        textWarningPasswordAgain = getActivity().findViewById(R.id.textWarningPasswordAgain);
+        textWarningName = view.findViewById(R.id.textWarningName);
+        textWarningEmail = view.findViewById(R.id.textWarningEmail);
+        textWarningPassword = view.findViewById(R.id.textWarningPassword);
+        textWarningPasswordAgain = view.findViewById(R.id.textWarningPasswordAgain);
 
-        spinnerCountries = getActivity().findViewById(R.id.spinnerCountry);
-        rgGender = getActivity().findViewById(R.id.rgGender);
-        agreementCheck = getActivity().findViewById(R.id.agreementCheck);
-        parent = getActivity().findViewById(R.id.parent);
+        spinnerCountries = view.findViewById(R.id.spinnerCountry);
+        rgGender = view.findViewById(R.id.rgGender);
+        agreementCheck = view.findViewById(R.id.agreementCheck);
+        parent = view.findViewById(R.id.parent);
     }
 }

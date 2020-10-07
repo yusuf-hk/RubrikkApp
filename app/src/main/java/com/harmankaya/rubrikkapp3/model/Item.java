@@ -16,6 +16,13 @@ public class Item
 
     private int userid;
 
+    public Item(String itemName, int price, String description)
+    {
+        this.itemName = itemName;
+        this.price = price;
+        this.description = description;
+    }
+
     public Item(int id, String itemName, String created, int price, String description, boolean sold, int userid)
     {
         this.id = id;

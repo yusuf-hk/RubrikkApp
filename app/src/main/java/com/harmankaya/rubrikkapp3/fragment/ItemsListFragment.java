@@ -37,16 +37,11 @@ public class ItemsListFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_item_list, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState)
-    {
-        super.onActivityCreated(savedInstanceState);
         getActivity().setTitle("Home page");
 
-        initViews();
+        initViews(view);
 
         setItemsList();
 
@@ -55,8 +50,9 @@ public class ItemsListFragment extends Fragment
         adapter.setItems(items);
 
         itemsRecView.setAdapter(adapter);
-        itemsRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        itemsRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
+        return view;
     }
 
     public void setItemsList()
@@ -81,9 +77,8 @@ public class ItemsListFragment extends Fragment
         });
     }
 
-    public void initViews()
+    public void initViews(View view)
     {
-        //swipeRefreshLayout = getActivity().findViewById(R.id.swipeRefreshLayout);
-        itemsRecView = getActivity().findViewById(R.id.itemsRecView);
+        itemsRecView = view.findViewById(R.id.itemsRecView);
     }
 }

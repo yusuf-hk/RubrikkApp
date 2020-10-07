@@ -15,13 +15,14 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.harmankaya.rubrikkapp3.R;
+import com.harmankaya.rubrikkapp3.fragment.AddItemFragment;
 import com.harmankaya.rubrikkapp3.fragment.ItemsListFragment;
+import com.harmankaya.rubrikkapp3.fragment.LoginFragment;
 import com.harmankaya.rubrikkapp3.fragment.RegisterFragment;
 import com.harmankaya.rubrikkapp3.preference.UsersPrefs;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -48,11 +49,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        updateData();
+
 
         FragmentManager fm = getSupportFragmentManager();
         ItemsListFragment itemsListFragment = new ItemsListFragment();
         fm.beginTransaction().replace(R.id.fragment_container, itemsListFragment).commit();
-        updateData();
     }
 
     @Override
@@ -67,6 +69,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new ItemsListFragment()).commit();
+                break;
+            case R.id.nav_logout:
+                UsersPrefs usersPrefs = new UsersPrefs(this);
+                usersPrefs.setToken("");
+                usersPrefs.setUserEmail("");
+                usersPrefs.setName("");
+                usersPrefs.setUserPassword("");
+                finish();
+                startActivity(getIntent());
+            case R.id.nav_login:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new LoginFragment()).commit();
+            case R.id.nav_add_item:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new AddItemFragment()).commit();
             default:
                 break;
         }
@@ -103,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public void updateData()
     {
-        UsersPrefs usersPrefs = new UsersPrefs(this);
-
+        UsersPrefs usersPrefs = new UsersPrefs(getApplicationContext());
+        System.out.println(usersPrefs.getToken());
         if (usersPrefs.getToken().equals(""))
         {
             Toast.makeText(this, "You have to login to buy and sell items", Toast.LENGTH_SHORT).show();
