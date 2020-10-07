@@ -52,8 +52,18 @@ public class ItemsListFragment extends Fragment
         itemsRecView.setAdapter(adapter);
         itemsRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                setItemsList();
+            }
+        });
+
         return view;
     }
+
 
     public void setItemsList()
     {
@@ -65,8 +75,17 @@ public class ItemsListFragment extends Fragment
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response)
             {
-                items = (ArrayList<Item>) response.body();
-                adapter.setItems(items);
+                if (response.isSuccessful())
+                {
+                    adapter.clear();
+                    items = (ArrayList<Item>) response.body();
+                    adapter.setItems(items);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Something went wrong to server", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -80,5 +99,6 @@ public class ItemsListFragment extends Fragment
     public void initViews(View view)
     {
         itemsRecView = view.findViewById(R.id.itemsRecView);
+        swipeRefreshLayout = view.findViewById(R.id.nav_home);
     }
 }

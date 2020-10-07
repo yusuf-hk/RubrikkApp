@@ -80,6 +80,12 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         }
     }
 
+    public void clear()
+    {
+        items.clear();
+        notifyDataSetChanged();
+    }
+
     public void setItems(ArrayList<Item> items)
     {
         this.items = items;
