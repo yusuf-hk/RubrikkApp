@@ -1,6 +1,8 @@
 package com.harmankaya.rubrikkapp3.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.harmankaya.rubrikkapp3.R;
+import com.harmankaya.rubrikkapp3.activity.ItemActivity;
 import com.harmankaya.rubrikkapp3.model.Item;
 
 import java.util.ArrayList;
@@ -48,6 +51,16 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
             public void onClick(View v)
             {
                 Toast.makeText(context, items.get(position).getItemName(), Toast.LENGTH_SHORT).show();
+
+                Item item = items.get(position);
+
+                //Passing item data to new activity
+                Intent intent = new Intent(context, ItemActivity.class);
+                intent.putExtra("itemName", item.getItemName());
+                intent.putExtra("price", Integer.toString(item.getPrice()));
+                intent.putExtra("description", item.getDescription());
+                intent.putExtra("id", Integer.toString(item.getId()));
+                v.getContext().startActivity(intent);
             }
         });
 

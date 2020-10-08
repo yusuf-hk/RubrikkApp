@@ -77,10 +77,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 usersPrefs.setName("");
                 usersPrefs.setUserPassword("");
                 finish();
+                overridePendingTransition(0, 0);
                 startActivity(getIntent());
+                overridePendingTransition(0, 0);
+                break;
             case R.id.nav_login:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new LoginFragment()).commit();
+                break;
             case R.id.nav_add_item:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AddItemFragment()).commit();

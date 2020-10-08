@@ -13,6 +13,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiInterface
 {
@@ -36,4 +37,7 @@ public interface ApiInterface
 
     @POST("items")
     public Call<Item> addItem(@Header("authorization") String token, @Body Item item);
+
+    @GET("items/{itemid}/buy")
+    public Call<ResponseBody> buyItem(@Header("authorization") String token, @Path("itemid") String id);
 }

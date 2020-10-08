@@ -118,8 +118,7 @@ public class LoginFragment extends Fragment
                     usersPrefs.setUserEmail(response.body().getEmail());
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    getActivity().finish();
-                    startActivity(intent);
+                    getActivity().recreate();
                 }
                 else
                 {
