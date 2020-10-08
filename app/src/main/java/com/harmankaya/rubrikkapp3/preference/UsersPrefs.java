@@ -28,6 +28,16 @@ public class UsersPrefs
         prefsEditor.putString(Config.KEY_TOKEN, token).commit();
     }
 
+    public String getId()
+    {
+        return userSharedPrefs.getString(Config.USER_ID, "");
+    }
+
+    public void setId(String id)
+    {
+        prefsEditor.putString(Config.USER_ID, id);
+    }
+
     public String getName()
     {
         return userSharedPrefs.getString(Config.KEY_NAME, "");

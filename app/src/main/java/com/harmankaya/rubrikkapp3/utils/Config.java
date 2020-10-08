@@ -8,6 +8,7 @@ public class Config
     // Keys that will be used to send the request to php scripts
 
     public static final String KEY_TOKEN = "token";
+    public static final String USER_ID = "id";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";

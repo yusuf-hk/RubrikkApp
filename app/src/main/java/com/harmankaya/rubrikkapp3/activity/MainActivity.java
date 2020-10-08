@@ -19,7 +19,16 @@ import com.harmankaya.rubrikkapp3.fragment.AddItemFragment;
 import com.harmankaya.rubrikkapp3.fragment.ItemsListFragment;
 import com.harmankaya.rubrikkapp3.fragment.LoginFragment;
 import com.harmankaya.rubrikkapp3.fragment.RegisterFragment;
+import com.harmankaya.rubrikkapp3.model.User;
 import com.harmankaya.rubrikkapp3.preference.UsersPrefs;
+import com.harmankaya.rubrikkapp3.rest.ApiClient;
+import com.harmankaya.rubrikkapp3.rest.ApiInterface;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -124,33 +133,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public void updateData()
     {
-        UsersPrefs usersPrefs = new UsersPrefs(getApplicationContext());
+        final UsersPrefs usersPrefs = new UsersPrefs(getApplicationContext());
         System.out.println(usersPrefs.getToken());
-        if (usersPrefs.getToken().equals(""))
-        {
-            Toast.makeText(this, "You have to login to buy and sell items", Toast.LENGTH_SHORT).show();
+        String token = usersPrefs.getToken();
 
-            navMenu.findItem(R.id.nav_home).setVisible(true);
-            navMenu.findItem(R.id.nav_add_item).setVisible(false);
-            navMenu.findItem(R.id.nav_sold_items).setVisible(false);
-            navMenu.findItem(R.id.nav_bought_items).setVisible(false);
-            navMenu.findItem(R.id.nav_profile).setVisible(false);
-            navMenu.findItem(R.id.nav_register).setVisible(true);
-            navMenu.findItem(R.id.nav_login).setVisible(true);
-            navMenu.findItem(R.id.nav_logout).setVisible(false);
-        }
-        else
-        {
-            Toast.makeText(this, "Welcome back", Toast.LENGTH_SHORT).show();
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
 
-            navMenu.findItem(R.id.nav_home).setVisible(true);
-            navMenu.findItem(R.id.nav_add_item).setVisible(true);
-            navMenu.findItem(R.id.nav_sold_items).setVisible(true);
-            navMenu.findItem(R.id.nav_bought_items).setVisible(true);
-            navMenu.findItem(R.id.nav_profile).setVisible(true);
-            navMenu.findItem(R.id.nav_register).setVisible(false);
-            navMenu.findItem(R.id.nav_login).setVisible(false);
-            navMenu.findItem(R.id.nav_logout).setVisible(true);
-        }
+        Call<User> call = api.getUser(token);
+
+        call.enqueue(new Callback<User>()
+        {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response)
+            {
+                if (response.body().getId() != null)
+                {
+                    Toast.makeText(getApplicationContext(), "Welcome back", Toast.LENGTH_SHORT).show();
+
+                    navMenu.findItem(R.id.nav_home).setVisible(true);
+                    navMenu.findItem(R.id.nav_add_item).setVisible(true);
+                    navMenu.findItem(R.id.nav_sold_items).setVisible(true);
+                    navMenu.findItem(R.id.nav_bought_items).setVisible(true);
+                    navMenu.findItem(R.id.nav_profile).setVisible(true);
+                    navMenu.findItem(R.id.nav_register).setVisible(false);
+                    navMenu.findItem(R.id.nav_login).setVisible(false);
+                    navMenu.findItem(R.id.nav_logout).setVisible(true);
+
+                    usersPrefs.setId(response.body().getId() + "");
+                    usersPrefs.setName(response.body().getEmail());
+                    usersPrefs.setUserEmail(response.body().getEmail());
+                    usersPrefs.setUserPassword(response.body().getPassword());
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "You have to login to buy and sell items", Toast.LENGTH_SHORT).show();
+
+                    navMenu.findItem(R.id.nav_home).setVisible(true);
+                    navMenu.findItem(R.id.nav_add_item).setVisible(false);
+                    navMenu.findItem(R.id.nav_sold_items).setVisible(false);
+                    navMenu.findItem(R.id.nav_bought_items).setVisible(false);
+                    navMenu.findItem(R.id.nav_profile).setVisible(false);
+                    navMenu.findItem(R.id.nav_register).setVisible(true);
+                    navMenu.findItem(R.id.nav_login).setVisible(true);
+                    navMenu.findItem(R.id.nav_logout).setVisible(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t)
+            {
+
+            }
+        });
     }
 }

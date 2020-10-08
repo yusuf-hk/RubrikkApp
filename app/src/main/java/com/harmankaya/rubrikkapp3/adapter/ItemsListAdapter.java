@@ -60,6 +60,7 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
                 intent.putExtra("price", Integer.toString(item.getPrice()));
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("id", Integer.toString(item.getId()));
+                intent.putExtra("buyerId", item.getUserid());
                 v.getContext().startActivity(intent);
             }
         });

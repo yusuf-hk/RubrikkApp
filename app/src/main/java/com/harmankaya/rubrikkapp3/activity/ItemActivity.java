@@ -61,7 +61,7 @@ public class ItemActivity extends AppCompatActivity
 
     public void buyItem()
     {
-        UsersPrefs usersPrefs = new UsersPrefs(this);
+        final UsersPrefs usersPrefs = new UsersPrefs(this);
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = api.buyItem(usersPrefs.getToken(), getIntent().getStringExtra("id"));
 
@@ -72,7 +72,14 @@ public class ItemActivity extends AppCompatActivity
             {
                 if (response.isSuccessful())
                 {
-                    Toast.makeText(ItemActivity.this, "You have successfully bought, " + getIntent().getStringExtra("itemName") + "!", Toast.LENGTH_SHORT).show();
+                    if (getIntent().getStringExtra("buyerId").equals(usersPrefs.getId()))
+                    {
+                        Toast.makeText(ItemActivity.this, "You can't buy your own item", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(ItemActivity.this, "You have successfully bought, " + getIntent().getStringExtra("itemName") + "!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {
