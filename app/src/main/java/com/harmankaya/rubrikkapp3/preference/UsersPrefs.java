@@ -28,14 +28,14 @@ public class UsersPrefs
         prefsEditor.putString(Config.KEY_TOKEN, token).commit();
     }
 
-    public String getId()
+    public int getId()
     {
-        return userSharedPrefs.getString(Config.USER_ID, "");
+        return userSharedPrefs.getInt(Config.USER_ID, 0);
     }
 
-    public void setId(String id)
+    public void setId(int id)
     {
-        prefsEditor.putString(Config.USER_ID, id);
+        prefsEditor.putInt(Config.USER_ID, id);
     }
 
     public String getName()

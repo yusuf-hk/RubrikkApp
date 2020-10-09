@@ -139,6 +139,7 @@ public class RegisterFragment extends Fragment
             {
             }
         });
+        call.cancel();
     }
 
     private void initViews(View view)

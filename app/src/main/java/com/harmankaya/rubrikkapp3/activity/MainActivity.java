@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navMenu.findItem(R.id.nav_login).setVisible(false);
                     navMenu.findItem(R.id.nav_logout).setVisible(true);
 
-                    usersPrefs.setId(response.body().getId() + "");
+                    usersPrefs.setId(response.body().getId());
                     usersPrefs.setName(response.body().getEmail());
                     usersPrefs.setUserEmail(response.body().getEmail());
                     usersPrefs.setUserPassword(response.body().getPassword());
@@ -185,5 +185,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        call.cancel();
     }
 }

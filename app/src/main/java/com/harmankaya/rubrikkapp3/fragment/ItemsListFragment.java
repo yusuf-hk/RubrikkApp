@@ -94,6 +94,7 @@ public class ItemsListFragment extends Fragment
                 Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+        call.cancel();
     }
 
     public void initViews(View view)

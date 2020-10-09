@@ -104,6 +104,7 @@ public class LoginFragment extends Fragment
 
             }
         });
+        call.cancel();
 
         Call<User> call2 = api.getUser(usersPrefs.getToken());
         call2.enqueue(new Callback<User>()
@@ -116,8 +117,8 @@ public class LoginFragment extends Fragment
                     usersPrefs.setName(response.body().getFirstName());
                     usersPrefs.setUserPassword(response.body().getPassword());
                     usersPrefs.setUserEmail(response.body().getEmail());
+                    usersPrefs.setId(response.body().getId());
 
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     getActivity().recreate();
                 }
                 else
@@ -133,6 +134,7 @@ public class LoginFragment extends Fragment
 
             }
         });
+        call2.cancel();
     }
 
     public void initViews(View view)
