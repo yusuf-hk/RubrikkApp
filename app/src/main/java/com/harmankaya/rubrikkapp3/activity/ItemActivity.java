@@ -65,34 +65,36 @@ public class ItemActivity extends AppCompatActivity
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> call = api.buyItem(usersPrefs.getToken(), getIntent().getStringExtra("id"));
 
-        call.enqueue(new Callback<ResponseBody>()
+        final int buyerId = getIntent().getIntExtra("buyerId", 0);
+
+        if (buyerId == usersPrefs.getId())
         {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+            Toast.makeText(ItemActivity.this, "You can't buy your own item", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            call.enqueue(new Callback<ResponseBody>()
             {
-                if (response.isSuccessful())
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
                 {
-                    if (getIntent().getStringExtra("buyerId").equals(usersPrefs.getId()))
-                    {
-                        Toast.makeText(ItemActivity.this, "You can't buy your own item", Toast.LENGTH_SHORT).show();
-                    }
-                    else
+                    if (response.isSuccessful())
                     {
                         Toast.makeText(ItemActivity.this, "You have successfully bought, " + getIntent().getStringExtra("itemName") + "!", Toast.LENGTH_SHORT).show();
                     }
+                    else
+                    {
+                        Toast.makeText(ItemActivity.this, "Something went wrong, try again later", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t)
                 {
-                    Toast.makeText(ItemActivity.this, "Something went wrong, try again later", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ItemActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t)
-            {
-
-            }
-        });
+            });
+        }
     }
 
     private void setTextView()

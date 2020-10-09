@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<User> call, Response<User> response)
             {
-                if (response.body().getId() != null)
+                if (response.isSuccessful())
                 {
                     Toast.makeText(getApplicationContext(), "Welcome back", Toast.LENGTH_SHORT).show();
 
